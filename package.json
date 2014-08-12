@@ -1,0 +1,19 @@
+{
+  "name": "log-range-query",
+  "description": "stream a range from ordered, dated files",
+  "version": "0.0.0",
+  "homepage": "https://github.com/micnews/log-range-query",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/micnews/log-range-query.git"
+  },
+  "dependencies": {
+    "pull-pairs": "~0.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "set -e; for t in test/*.js; do node $t; done"
+  },
+  "author": "Dominic Tarr <dominictarr@micnews.com> (http://micnews.com)",
+  "license": "MIT"
+}
