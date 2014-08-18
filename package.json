@@ -1,7 +1,7 @@
 {
   "name": "log-range-query",
   "description": "stream a range from ordered, dated files",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "homepage": "https://github.com/micnews/log-range-query",
   "repository": {
     "type": "git",
