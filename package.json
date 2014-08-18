@@ -9,7 +9,10 @@
   },
   "dependencies": {
     "pull-pairs": "~0.0.0",
-    "pull-glob": "~1.0.1"
+    "pull-glob": "~1.0.1",
+    "pull-stream": "~2.24.0",
+    "minimist": "~1.1.0",
+    "pull-split": "~0.1.2"
   },
   "devDependencies": {},
   "scripts": {
