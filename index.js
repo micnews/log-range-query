@@ -4,9 +4,8 @@ var glob   = require('pull-glob')
 var pull   = require('pull-stream')
 var pair   = require('pull-pairs')
 var path   = require('path')
-var toPull = require('stream-to-pull-stream')
 var split  = require('pull-split')
-var CSV    = require('csv-line')
+var toPull = require('stream-to-pull-stream')
 
 function rangeFiles (dir, opts) {
 
@@ -18,6 +17,8 @@ function rangeFiles (dir, opts) {
   function pad (s) {
     return s < 10 ? '0'+s : ''+s
   }
+
+  console.log(dir, opts)
 
   return pull(
     glob(path.join(dir, '*/*/*/*')),
@@ -101,12 +102,13 @@ if(!module.parent) {
 
   var b = ''
   pull(queryPullStream(opts), pull.drain(function (d) {
-    b += d + '\n'
+    b += d
     if(b.length > 30000) {
       process.stdout.write(b)
       b = ''
     }
   }, function (e) {
+    if(e) throw e
     process.stdout.write(b)
   }))
 }
