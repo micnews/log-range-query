@@ -12,7 +12,8 @@
     "pull-glob": "~1.0.1",
     "pull-stream": "~2.24.0",
     "minimist": "~1.1.0",
-    "pull-split": "~0.1.2"
+    "pull-split": "~0.1.2",
+    "stream-to-pull-stream": "~1.4.1"
   },
   "devDependencies": {},
   "scripts": {
