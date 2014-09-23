@@ -13,7 +13,9 @@
     "pull-stream": "~2.24.0",
     "minimist": "~1.1.0",
     "pull-split": "~0.1.2",
-    "stream-to-pull-stream": "~1.4.1"
+    "stream-to-pull-stream": "~1.4.1",
+    "regexp-isodate": "~1.0.0",
+    "pull-cat": "~1.1.5"
   },
   "devDependencies": {},
   "scripts": {
