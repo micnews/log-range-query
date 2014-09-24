@@ -1,13 +1,24 @@
 
-var fs     = require('fs')
-var glob   = require('pull-glob')
-var pull   = require('pull-stream')
-var pair   = require('pull-pairs')
-var path   = require('path')
-var split  = require('pull-split')
-var toPull = require('stream-to-pull-stream')
+var fs      = require('fs')
+var glob    = require('pull-glob')
+var pull    = require('pull-stream')
+var cat     = require('pull-cat')
+var pair    = require('pull-pairs')
+var path    = require('path')
+var split   = require('pull-split')
+var toPull  = require('stream-to-pull-stream')
+var isodate = require('regexp-isodate')
+
+var date
+
+var debug = !!process.env.DEBUG
 
 function rangeFiles (dir, opts) {
+
+  var globs =
+    'string' === typeof opts.globs ? [opts.globs]
+    //default to the globs that will match log-rotation-stream
+  : opts.globs || ['*/*/*/*', '*']
 
   var gt = opts.gt ? new Date(opts.gt) : null
   var lt = opts.lt ? new Date(opts.lt) : null
@@ -18,35 +29,38 @@ function rangeFiles (dir, opts) {
     return s < 10 ? '0'+s : ''+s
   }
 
-  console.log(dir, opts)
-
   return pull(
-    glob(path.join(dir, '*/*/*/*')),
+    cat(globs.map(function (pattern) {
+      return glob(path.join(dir, pattern))
+    })),
     pull.map(function (s) {
-      return new Date(path.basename(s))
+      var m = isodate.exec(s)
+      return m && {filename: s, ts: new Date(path.basename(m[1]))}
     }),
+    pull.filter(Boolean),
     pair(function (a, b) {
-      //we want to filter out the files which may contain
-      //records in within the range.
-      //since the file name is the START of the range
-      //if (gt < b && gt > a) return a
-      //or (lt < a) return a
+      // we want to filter out the files which may contain
+      // records in within the range.
+      // since the file name is the START of the range
+      // if (gt < b.ts && gt > a.ts) return a
+      // or (lt < a.ts) return a
 
-      if(a && (
-        gt ? gt < b : true
+      // except if it's the last file,
+      // then open this file if a.ts < lt
+      // gt doesn't count in this case,
+      // because we can't say that it's not in the file.
+
+      if (a && (
+        gt ? (!b || gt < b.ts) : true
       ) && (
-        lt ? lt > a : true
+        lt ? lt > a.ts         : true
       ))
         return a
+
     }),
-    pull.map(function (date) {
-      return path.join(
-        dir,
-        ''+ date.getFullYear(),
-        pad(date.getMonth()),
-        pad(date.getDay()),
-        date.toISOString()
-      )
+    pull.map(function (data) {
+      if(debug) console.error(data.filename)
+      return data.filename
     })
 
   )
