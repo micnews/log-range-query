@@ -8,7 +8,7 @@
     "url": "git://github.com/micnews/log-range-query.git"
   },
   "dependencies": {
-    "pull-pairs": "~0.0.0",
+    "pull-pairs": "~1.0.0",
     "pull-glob": "~1.0.1",
     "pull-stream": "~2.24.0",
     "minimist": "~1.1.0",
